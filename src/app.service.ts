@@ -11,7 +11,7 @@ export class AppService {
   }
 
   async sendMessage(): Promise<string> {
-    const token = 'telegram-api-token;
+    const token = 'telegram-api-token';
     const chatId = 'chat-id';
     const message = '<b>🎉 Hello!</b>\n\n<i>This is a formatted message</i>\n\n<code>Code block example</code>\n\n<a href="https://telegram.org">Visit Telegram</a>';
 
