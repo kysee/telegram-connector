@@ -8,10 +8,7 @@ export class JiraService {
 
     async sendMessage(body: any, parmas: { token: string, chatId: string, topicId?: string }): Promise<string> {
         const url = `https://api.telegram.org/bot${parmas.token}/sendMessage`;
-        const message = `Jira
-    
-    ${this.makeHtml(body)}    
-    `;
+        const message = `Jira\n\n${this.makeHtml(body)}`;
 
         try {
             await firstValueFrom(
@@ -33,12 +30,12 @@ export class JiraService {
     makeHtml(evt: any) {
         const action = extractAction(evt.webhookEvent);
         return `<b>${evt.user.displayName} ${action[1]} the ${evt.issue.fields.issuetype.name}</b>
-    <b><a href="https://beatoz.atlassian.net/browse/${evt.issue.key}">${evt.issue.key} ${evt.issue.fields.summary}</a></b>
+<b><a href="https://beatoz.atlassian.net/browse/${evt.issue.key}">${evt.issue.key} ${evt.issue.fields.summary}</a></b>
     
-    Status: <code>${evt.issue.fields.status.name}</code>
-    Type: <code>${evt.issue.fields.issuetype.name}</code> 
-    Assignee: <code>${evt.issue.fields.assignee?.displayName ?? 'None'}</code>
-    `;
+Status: <code>${evt.issue.fields.status.name}</code>
+Type: <code>${evt.issue.fields.issuetype.name}</code> 
+Assignee: <code>${evt.issue.fields.assignee?.displayName ?? 'None'}</code>
+`;
     }
 }
 
