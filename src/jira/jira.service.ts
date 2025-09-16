@@ -15,7 +15,7 @@ export class JiraService {
                 this.httpService.post(url, {
                     chat_id: parmas.chatId,
                     message_thread_id: parmas.topicId ?? '',
-                    text: message, //"👤 *Event Title*\nThis is a short one-line description.\n\n*Status 1:* Active\n*Status 2:* 15\n*Status 3:* Completed",
+                    text: message,
                     parse_mode: "HTML"
                 })
             );
