@@ -10,24 +10,55 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async sendMessage(): Promise<string> {
+  async sendMessage(body: any): Promise<string> {
+    // console.log(JSON.stringify(body, null, '  '));
     const token = 'telegram-api-token';
     const chatId = 'chat-id';
-    const message = '<b>🎉 Hello!</b>\n\n<i>This is a formatted message</i>\n\n<code>Code block example</code>\n\n<a href="https://telegram.org">Visit Telegram</a>';
-
+    const topicId = 'message-thread-id';
     const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+    const message = `Jira
+
+${this.makeHtml(body)}    
+`;
+
     try {
       await firstValueFrom(
         this.httpService.post(url, {
           chat_id: chatId,
-          text: message,
-          parse_mode: 'HTML',
+          message_thread_id: topicId,
+          text: message, //"👤 *Event Title*\nThis is a short one-line description.\n\n*Status 1:* Active\n*Status 2:* 15\n*Status 3:* Completed",
+          parse_mode: "HTML"
         })
       );
 
       return 'Message sent successfully';
     } catch (error) {
+      console.error(error);
       return `Failed to send message: ${error}`;
     }
   }
+
+  makeHtml(evt: any) {
+    const action = extractAction(evt.webhookEvent);
+    return `<b>${evt.user.displayName} ${action[1]} the ${evt.issue.fields.issuetype.name}</b>
+<b><a href="https://beatoz.atlassian.net/browse/${evt.issue.key}">${evt.issue.key} ${evt.issue.fields.summary}</a></b>
+
+Status: <code>${evt.issue.fields.status.name}</code>
+Type: <code>${evt.issue.fields.issuetype.name}</code> 
+Assignee: <code>${evt.issue.fields.assignee?.displayName ?? 'None'}</code>
+`;
+  }
+}
+//https://beatoz.atlassian.net/browse/RG-52
+function escapeMarkdownV2(text) {
+  return text.replace(/([_*\[\]()~`>#+\-=|{}.!])/g, '\\$1');
+}
+
+function extractAction(input: string): string[] {
+  // 1. "jira:issue_updated" → ["jira", "issue_updated"]
+  const [, rest] = input.split(":");
+
+  // 2. "issue_updated" → ["issue", "updated"]
+  return rest.split("_");
 }
