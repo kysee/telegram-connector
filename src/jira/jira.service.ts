@@ -29,7 +29,7 @@ export class JiraService {
 
     makeHtml(evt: any) {
         const action = extractAction(evt.webhookEvent);
-        return `<b>${evt.user.displayName} ${action[1]} the ${evt.issue.fields.issuetype.name}</b>
+        return `<b>${evt.user.displayName} ${action} the ${evt.issue.fields.issuetype.name}</b>
 <b><a href="https://beatoz.atlassian.net/browse/${evt.issue.key}">${evt.issue.key} ${evt.issue.fields.summary}</a></b>
     
 Status: <code>${evt.issue.fields.status.name}</code>
@@ -39,15 +39,11 @@ Assignee: <code>${evt.issue.fields.assignee?.displayName ?? 'None'}</code>
     }
 }
 
-//https://beatoz.atlassian.net/browse/RG-52
 function escapeMarkdownV2(text) {
     return text.replace(/([_*\[\]()~`>#+\-=|{}.!])/g, '\\$1');
 }
 
-function extractAction(input: string): string[] {
-    // 1. "jira:issue_updated" → ["jira", "issue_updated"]
-    const [, rest] = input.split(":");
-
-    // 2. "issue_updated" → ["issue", "updated"]
-    return rest.split("_");
+function extractAction(input: string): string {
+    const ret = input.split("_");
+    return ret == null ? "unknown" : ret[ret.length - 1];
 }
