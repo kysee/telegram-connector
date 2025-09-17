@@ -38,7 +38,7 @@ export class GithubService {
 <blockquote expandable>
 `;
         for (const c of commits) {
-            htmlMsg += `${c.id.substring(0, 7)} <a href='${c.url}'>${c.message}</a>\n`;
+            htmlMsg += `<a href='${c.url}'>${c.id.substring(0, 7)}</a> ${c.message}\n`;
         }
         htmlMsg += '</blockquote>';
         return htmlMsg;
