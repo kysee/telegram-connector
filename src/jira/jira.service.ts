@@ -35,6 +35,7 @@ export class JiraService {
 Status: <code>${evt.issue.fields.status.name}</code>
 Type: <code>${evt.issue.fields.issuetype.name}</code> 
 Assignee: <code>${evt.issue.fields.assignee?.displayName ?? 'None'}</code>
+Action: evt.webhookEvent
 `;
     }
 }
