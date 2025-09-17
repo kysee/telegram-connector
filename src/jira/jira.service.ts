@@ -29,7 +29,7 @@ export class JiraService {
 
     makeHtml(evt: any) {
         const action = extractAction(evt.webhookEvent);
-        return `<b>${evt.user.displayName} ${action} the ${evt.issue.fields.issuetype.name}</b>
+        return `<b>${evt.user?.displayName ?? 'Unknown'} ${action} the ${evt.issue.fields.issuetype.name}</b>
 <b><a href="https://beatoz.atlassian.net/browse/${evt.issue.key}">${evt.issue.key} ${evt.issue.fields.summary}</a></b>
     
 Status: <code>${evt.issue.fields.status.name}</code>
