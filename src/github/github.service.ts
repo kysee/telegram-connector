@@ -27,8 +27,9 @@ export class GithubService {
     }
 
     makeHtml(evt: any) {
+        console.debug('github webhook event', evt);
         const repoUrl = evt.repository.html_url;
-        const repoName = evt.repository.name;
+        const repoName = evt.repository.full_name;
         const pusherName = evt.pusher.name;
         const commits = evt.commits
 
@@ -38,7 +39,7 @@ export class GithubService {
 <blockquote expandable>
 `;
         for (const c of commits) {
-            htmlMsg += `<code><a href='${c.url}'>${c.id.substring(0, 7)}</a></code> ${c.message}\n`;
+            htmlMsg += `<a href='${c.url}'>${c.id.substring(0, 7)}</a> ${c.message}\n`;
         }
         htmlMsg += '</blockquote>';
         return htmlMsg;

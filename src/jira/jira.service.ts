@@ -28,7 +28,7 @@ export class JiraService {
     }
 
     makeHtml(evt: any) {
-        console.debug('jira webhook event payload', evt);
+        console.debug('jira webhook event', evt);
         const [what, action] = extractAction(evt.webhookEvent);
         const who = evt.user?.displayName ?? evt.comment.author.displayName ?? `unknown(${what})`;
         return `Jira\n\n<b>${who} ${action} the ${what}</b>
